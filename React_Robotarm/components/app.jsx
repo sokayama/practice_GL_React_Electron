@@ -7,12 +7,13 @@ import Store  from '../stores/appStore.js';
 
 import ReactDOM from "react-dom";
 
+import io from "socket.io-client";
+
 "use strict";
 
 export default class RobotArmApp extends React.Component {
     constructor(props){
         super(props);
-
         //create instance : dispatcher,action,store
         var dispatcher = new Flux.Dispatcher;
         this.action = new Action({dispatcher: dispatcher, props:props});
@@ -393,18 +394,18 @@ export default class RobotArmApp extends React.Component {
         // }
         
         //スライダ情報の取得
-        ele_slider1.addEventListener("change",function(eve){
-            socket.emit("send1",ele_slider1.value);//サーバーへ送信
-        },false);
-        ele_slider10.addEventListener("change",function(eve){
-            socket.emit("send10",ele_slider10.value);//サーバーへ送信
-        },false);
-        ele_slider2.addEventListener("change",function(eve){
-            socket.emit("send2",ele_slider2.value);//サーバーへ送信
-        },false);
-        ele_slider20.addEventListener("change",function(eve){
-            socket.emit("send20",ele_slider20.value);//サーバーへ送信
-        },false);
+        // ele_slider1.addEventListener("change",function(eve){
+        //     socket.emit("send1",ele_slider1.value);//サーバーへ送信
+        // },false);
+        // ele_slider10.addEventListener("change",function(eve){
+        //     socket.emit("send10",ele_slider10.value);//サーバーへ送信
+        // },false);
+        // ele_slider2.addEventListener("change",function(eve){
+        //     socket.emit("send2",ele_slider2.value);//サーバーへ送信
+        // },false);
+        // ele_slider20.addEventListener("change",function(eve){
+        //     socket.emit("send20",ele_slider20.value);//サーバーへ送信
+        // },false);
 
 
             
@@ -437,6 +438,7 @@ export default class RobotArmApp extends React.Component {
 
         var counter = 0;
 
+        timerFunc = timerFunc.bind(this);
         timerFunc();
         function timerFunc()
         {
@@ -479,12 +481,12 @@ export default class RobotArmApp extends React.Component {
             mRootMatrix = m.identity(m.create());
 
             var rotateArm1;
-            m.rotate(mArm1Matrix,slider10,[0.0,1.0,0.0],mArm1Matrix);
-            m.rotate(mArm1Matrix,slider1,[1.0,0.0,0.0],mArm1Matrix)
+            m.rotate(mArm1Matrix,this.state.slider[1].value,[0.0,1.0,0.0],mArm1Matrix);
+            m.rotate(mArm1Matrix,this.state.slider[0].value,[1.0,0.0,0.0],mArm1Matrix)
 
             m.translate(mArm1Matrix,[0.0,lengthArm,0.0],mArm2Matrix);
-            m.rotate(mArm2Matrix,slider20,[0.0,1.0,0.0],mArm2Matrix);
-            m.rotate(mArm2Matrix,slider2,[1.0,0.0,0.0],mArm2Matrix);
+            m.rotate(mArm2Matrix,this.state.slider[3].value,[0.0,1.0,0.0],mArm2Matrix);
+            m.rotate(mArm2Matrix,this.state.slider[2].value,[1.0,0.0,0.0],mArm2Matrix);
 
             m.translate(mArm1Matrix,[0.0,lengthArm,0.0],mJointMatrix);
 
@@ -528,9 +530,9 @@ export default class RobotArmApp extends React.Component {
 
             // - レンダリング ------------------------------------------------------------- *
             // モデルの描画
-            set_attribute(handVBO, attLocation, attStride);
+            this.set_attribute(handVBO, attLocation, attStride);
             this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, handIBO);
-            this.gl.bindTexture(this.gl.TEXTURE_2D,this.gl.textures[0]);
+            this.gl.bindTexture(this.gl.TEXTURE_2D,this.textures[0]);
             this.gl.drawElements(this.gl.TRIANGLES, handData.i_triangles.length, this.gl.UNSIGNED_SHORT, 0);
 
             //vColor = vec4(color.rgb * dotNormal, color.a);
@@ -559,9 +561,9 @@ export default class RobotArmApp extends React.Component {
 
             // - レンダリング ------------------------------------------------------------- *
             // モデルの描画
-            set_attribute(jointVBO, attLocation, attStride);
+            this.set_attribute(jointVBO, attLocation, attStride);
             this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, handIBO);
-            this.gl.bindTexture(this.gl.TEXTURE_2D,this.gl.textures[0]);
+            this.gl.bindTexture(this.gl.TEXTURE_2D,this.textures[0]);
             this.gl.drawElements(this.gl.TRIANGLES, jointData.i_triangles.length, this.gl.UNSIGNED_SHORT, 0);
 
             //vColor = vec4(color.rgb * dotNormal, color.a);
@@ -590,9 +592,9 @@ export default class RobotArmApp extends React.Component {
 
             // - レンダリング ------------------------------------------------------------- *
             // モデルの描画
-            set_attribute(rootVBO, attLocation, attStride);
+            this.set_attribute(rootVBO, attLocation, attStride);
             this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, rootIBO);
-            this.gl.bindTexture(this.gl.TEXTURE_2D,this.gl.textures[0]);
+            this.gl.bindTexture(this.gl.TEXTURE_2D,this.textures[0]);
             this.gl.drawElements(this.gl.TRIANGLES, rootData.i_triangles.length, this.gl.UNSIGNED_SHORT, 0);
 
             //vColor = vec4(color.rgb * dotNormal, color.a);
@@ -621,9 +623,9 @@ export default class RobotArmApp extends React.Component {
 
             // - レンダリング ------------------------------------------------------------- *
             // モデルの描画
-            set_attribute(arm1VBO, attLocation, attStride);
+            this.set_attribute(arm1VBO, attLocation, attStride);
             this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, arm1IBO);
-            this.gl.bindTexture(this.gl.TEXTURE_2D,this.gl.textures[0]);
+            this.gl.bindTexture(this.gl.TEXTURE_2D,this.textures[0]);
             this.gl.drawElements(this.gl.TRIANGLES, arm1Data.i_triangles.length, this.gl.UNSIGNED_SHORT, 0);
 
             
@@ -653,9 +655,9 @@ export default class RobotArmApp extends React.Component {
 
             // - レンダリング ------------------------------------------------------------- *
             // モデルの描画
-            set_attribute(arm2VBO, attLocation, attStride);
+            this.set_attribute(arm2VBO, attLocation, attStride);
             this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, arm2IBO);
-            this.gl.bindTexture(this.gl.TEXTURE_2D,this.gl.textures[0]);
+            this.gl.bindTexture(this.gl.TEXTURE_2D,this.textures[0]);
             this.gl.drawElements(this.gl.TRIANGLES, arm2Data.i_triangles.length, this.gl.UNSIGNED_SHORT, 0);
 
 
