@@ -5,6 +5,8 @@ import Flux   from 'flux';
 import Action from '../actions/appAction.js';
 import Store  from '../stores/appStore.js';
 
+import ReactDOM from "react-dom";
+
 export default class RobotArmApp extends React.Component {
     constructor(props){
         super(props);
@@ -31,6 +33,8 @@ export default class RobotArmApp extends React.Component {
 
         //bind function
         this.sliderChange = this.sliderChange.bind(this);
+        this.initWebGL = this.initWebGL.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
     }
     
     styles(){
@@ -44,13 +48,20 @@ export default class RobotArmApp extends React.Component {
     sliderChange(eve){
         this.action.updateSlider(eve.currentTarget.id,eve.currentTarget.value);
     }
+    initWebGL(eve){
+        this.action.initWebGL();
+    }
+    componentDidMount(){
+        this.refs.canvas;
+        let canvas = ReactDOM.findDOMNode(this.refs.canvas);
+        debugger;
+    };
 
     render(){
         const style = this.styles();
         return (
-
             <div>
-                <canvas id="canvas" width={this.canvasWidth} height={this.canvasHeight}></canvas>
+                <canvas id="canvas" width={this.canvasWidth} height={this.canvasHeight} onClick={this.initWebGL.bind(this)} ref="canvas"></canvas>
                 <p>根元関節<br />
                     <input id={this.state.slider[0].id} type="range" onChange={this.sliderChange.bind(this)} value={this.state.slider[0].value} min={this.state.slider[0].min} max={this.state.slider[0].max} step={this.state.slider[0].step} /><br />
                     <input id={this.state.slider[1].id} type="range" onChange={this.sliderChange.bind(this)} value={this.state.slider[1].value} min={this.state.slider[1].min} max={this.state.slider[1].max} step={this.state.slider[1].step}  /><br />
