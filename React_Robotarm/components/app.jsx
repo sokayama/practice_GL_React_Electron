@@ -30,6 +30,8 @@ export default class RobotArmApp extends React.Component {
         this.fs;
         this.textures = [];
 
+        this.socket;
+
         //sliderの情報を取得
         //state. storeから初期値を取得する
         this.state = {
@@ -67,21 +69,27 @@ export default class RobotArmApp extends React.Component {
     }
 
     sliderChange(eve){
-        this.action.updateSlider(eve.currentTarget.id,eve.currentTarget.value);
-        
+        console.log("send :" + eve.currentTarget.id + " " + eve.currentTarget.value);
         switch(eve.currentTarget.id){
-            case 0:
-              socket.emit("send1",eve.currentTarget.value);
-            case 1:
-              socket.emit("send10",eve.currentTarget.value);
-            case 2:
-              socket.emit("send2",eve.currentTarget.value);
-            case 3:
-              socket.emit("send20",eve.currentTarget.value);
+            case "slider0":
+              this.socket.emit("send1",eve.currentTarget.value-0);
+              break;
+            case "slider1":
+              this.socket.emit("send10",eve.currentTarget.value-0);
+              break;
+            case "slider2":
+              this.socket.emit("send2",eve.currentTarget.value-0);
+              break;
+            case "slider3":
+              this.socket.emit("send20",eve.currentTarget.value-0);
+              break;
+            default:
         }
+        this.action.updateSlider(eve.currentTarget.id,eve.currentTarget.value-0);
+        
     }
     sliderChangeSocket(id,value){
-        this.action.updateSlider(id,value);
+        this.action.updateSlider(id,value-0);
     }
     componentDidMount(){
         this.refs.canvas;
@@ -317,27 +325,27 @@ export default class RobotArmApp extends React.Component {
         var myIP = 0;
 
 
-        var socket = io.connect();//connection開始
-        socket.on("push1",function(push_data){//サーバーから受信
+        this.socket = io.connect();//connection開始
+        this.socket.on("push1",function(push_data){//サーバーから受信
             // ele_slider1.value = push_data;
             // slider1 = push_data;
-            this.sliderChangeSocket(0,push_data);
+            this.sliderChangeSocket("slider0",push_data);
             console.log("receive push_data : " + push_data);
         }.bind(this));
-        socket.on("push10",function(push_data){//サーバーから受信
-            this.sliderChangeSocket(1,push_data);
+        this.socket.on("push10",function(push_data){//サーバーから受信
+            this.sliderChangeSocket("slider1",push_data);
             console.log("receive push_data : " + push_data);
         }.bind(this));
-        socket.on("push2",function(push_data){//サーバーから受信
-            this.sliderChangeSocket(2,push_data);
+        this.socket.on("push2",function(push_data){//サーバーから受信
+            this.sliderChangeSocket("slider2",push_data);
             console.log("receive push_data : " + push_data);
         }.bind(this));
-        socket.on("push20",function(push_data){//サーバーから受信
-            this.sliderChangeSocket(3,push_data);
+        this.socket.on("push20",function(push_data){//サーバーから受信
+            this.sliderChangeSocket("slider3",push_data);
             console.log("receive push_data : " + push_data);
         }.bind(this));
 
-        socket.on("push_guest_list",function(push_data){//接続してる人たち
+        this.socket.on("push_guest_list",function(push_data){//接続してる人たち
             guestdata_list = push_data;
             let ipbox_value = "";
             console.log("receive guestdata_list : " + push_data);
@@ -347,13 +355,13 @@ export default class RobotArmApp extends React.Component {
             }
             this.action.updateIPBox(ipbox_value);//actionにipboxの中身送信
         }.bind(this));
-        socket.on("push_guest",function(push_data){//自分のIPキープしとく
+        this.socket.on("push_guest",function(push_data){//自分のIPキープしとく
             myIP = push_data;
             console.log("私のIPは" + myIP)
         }.bind(this));
-        socket.on("connect",function(){
+        this.socket.on("connect",function(){
         　//タイムアウトを5秒に設定する
-        　socket.headbeatTimeout = 5000;
+        　this.socket.headbeatTimeout = 5000;
         }.bind(this));
         // window.onbeforeunload = function (e) {
         //     console.log("disconnected..." + myIP)

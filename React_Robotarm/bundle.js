@@ -19766,6 +19766,8 @@
 	        _this.fs;
 	        _this.textures = [];
 
+	        _this.socket;
+
 	        //sliderの情報を取得
 	        //state. storeから初期値を取得する
 	        _this.state = {
@@ -19804,23 +19806,28 @@
 	    }, {
 	        key: 'sliderChange',
 	        value: function sliderChange(eve) {
-	            this.action.updateSlider(eve.currentTarget.id, eve.currentTarget.value);
-
+	            console.log("send :" + eve.currentTarget.id + " " + eve.currentTarget.value);
 	            switch (eve.currentTarget.id) {
-	                case 0:
-	                    socket.emit("send1", eve.currentTarget.value);
-	                case 1:
-	                    socket.emit("send10", eve.currentTarget.value);
-	                case 2:
-	                    socket.emit("send2", eve.currentTarget.value);
-	                case 3:
-	                    socket.emit("send20", eve.currentTarget.value);
+	                case "slider0":
+	                    this.socket.emit("send1", eve.currentTarget.value - 0);
+	                    break;
+	                case "slider1":
+	                    this.socket.emit("send10", eve.currentTarget.value - 0);
+	                    break;
+	                case "slider2":
+	                    this.socket.emit("send2", eve.currentTarget.value - 0);
+	                    break;
+	                case "slider3":
+	                    this.socket.emit("send20", eve.currentTarget.value - 0);
+	                    break;
+	                default:
 	            }
+	            this.action.updateSlider(eve.currentTarget.id, eve.currentTarget.value - 0);
 	        }
 	    }, {
 	        key: 'sliderChangeSocket',
 	        value: function sliderChangeSocket(id, value) {
-	            this.action.updateSlider(id, value);
+	            this.action.updateSlider(id, value - 0);
 	        }
 	    }, {
 	        key: 'componentDidMount',
@@ -20023,31 +20030,31 @@
 	            var guestdata_list = [];
 	            var myIP = 0;
 
-	            var socket = _socket2.default.connect(); //connection開始
-	            socket.on("push1", function (push_data) {
+	            this.socket = _socket2.default.connect(); //connection開始
+	            this.socket.on("push1", function (push_data) {
 	                //サーバーから受信
 	                // ele_slider1.value = push_data;
 	                // slider1 = push_data;
-	                this.sliderChangeSocket(0, push_data);
+	                this.sliderChangeSocket("slider0", push_data);
 	                console.log("receive push_data : " + push_data);
 	            }.bind(this));
-	            socket.on("push10", function (push_data) {
+	            this.socket.on("push10", function (push_data) {
 	                //サーバーから受信
-	                this.sliderChangeSocket(1, push_data);
+	                this.sliderChangeSocket("slider1", push_data);
 	                console.log("receive push_data : " + push_data);
 	            }.bind(this));
-	            socket.on("push2", function (push_data) {
+	            this.socket.on("push2", function (push_data) {
 	                //サーバーから受信
-	                this.sliderChangeSocket(2, push_data);
+	                this.sliderChangeSocket("slider2", push_data);
 	                console.log("receive push_data : " + push_data);
 	            }.bind(this));
-	            socket.on("push20", function (push_data) {
+	            this.socket.on("push20", function (push_data) {
 	                //サーバーから受信
-	                this.sliderChangeSocket(3, push_data);
+	                this.sliderChangeSocket("slider3", push_data);
 	                console.log("receive push_data : " + push_data);
 	            }.bind(this));
 
-	            socket.on("push_guest_list", function (push_data) {
+	            this.socket.on("push_guest_list", function (push_data) {
 	                //接続してる人たち
 	                guestdata_list = push_data;
 	                var ipbox_value = "";
@@ -20058,14 +20065,14 @@
 	                }
 	                this.action.updateIPBox(ipbox_value); //actionにipboxの中身送信
 	            }.bind(this));
-	            socket.on("push_guest", function (push_data) {
+	            this.socket.on("push_guest", function (push_data) {
 	                //自分のIPキープしとく
 	                myIP = push_data;
 	                console.log("私のIPは" + myIP);
 	            }.bind(this));
-	            socket.on("connect", function () {
+	            this.socket.on("connect", function () {
 	                //タイムアウトを5秒に設定する
-	                socket.headbeatTimeout = 5000;
+	                this.socket.headbeatTimeout = 5000;
 	            }.bind(this));
 	            // window.onbeforeunload = function (e) {
 	            //     console.log("disconnected..." + myIP)
