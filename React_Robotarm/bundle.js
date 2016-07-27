@@ -20019,51 +20019,11 @@
 
 	            var lightDirection = [0.577, 0.577, 0.577];
 
-	            // //根元スライダ情報取得
-	            // //まがる
-	            // var ele_slider1 = document.getElementById("slider1");
-	            // var slider1 = 0.0;
-	            // ele_slider1.addEventListener("input",function(eve)
-	            // {
-	            //     slider1 = eve.currentTarget.value - 0;//cast
-	            // },false);
-	            // //ひねる
-	            // var ele_slider10 = document.getElementById("slider10");
-	            // var slider10 = 0.0;
-	            // ele_slider10.addEventListener("input",function(eve)
-	            // {
-	            //     slider10 = eve.currentTarget.value - 0;//cast
-	            // },false);
-
-	            // //中央スライダ情報取得
-	            // //まがる
-	            // var ele_slider2 = document.getElementById("slider2");
-	            // var slider2 = 0.0;
-	            // ele_slider2.addEventListener("input",function(eve)
-	            // {
-	            //     slider2 = eve.currentTarget.value - 0;//cast
-	            // },false);
-	            // //ひねる
-	            // var ele_slider20 = document.getElementById("slider20");
-	            // var slider20 = 0.0;
-	            // ele_slider20.addEventListener("input",function(eve)
-	            // {
-	            //     slider20 = eve.currentTarget.value - 0;//cast
-	            // },false);
-
-
 	            //socket.io関係	
 	            var guestdata_list = [];
 	            var myIP = 0;
 
 	            var socket = _socket2.default.connect(); //connection開始
-	            // var ele_ipbox = document.getElementById("ip_box");
-	            // var ele_button_disconnect = document.getElementById("button_disconnect");
-	            // ele_button_disconnect.addEventListener("click",function(){
-	            // 	console.log("切断")
-	            // 	socket.disconnect();
-	            // })
-
 	            socket.on("push1", function (push_data) {
 	                //サーバーから受信
 	                // ele_slider1.value = push_data;
