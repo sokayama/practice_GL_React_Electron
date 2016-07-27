@@ -19,7 +19,7 @@ export default class Action{
 }
 
 
-
+//main.jsからコピペ
 //必要なものをべちゃべちゃ貼り付けてる。きたない
 
 var c, gl, vs, fs;
