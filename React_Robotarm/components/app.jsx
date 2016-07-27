@@ -45,7 +45,12 @@ export default class RobotArmApp extends React.Component {
         this.sliderChange = this.sliderChange.bind(this);
         this.initWebGL = this.initWebGL.bind(this);
         this.create_texture = this.create_texture.bind(this);
+        this.set_attribute = this.set_attribute.bind(this);
+        this.create_ibo = this.create_ibo.bind(this);
+        this.create_program = this.create_program.bind(this);
+        this.create_shader = this.create_shader.bind(this);
         this.initialize = this.initialize.bind(this);
+        this.create_vbo = this.create_vbo.bind(this);
     }
     
     styles(){
@@ -188,71 +193,71 @@ export default class RobotArmApp extends React.Component {
 
         // VBOの生成
         var handVBO = [];
-        handVBO[0] = create_vbo(handData.p);
-        handVBO[1] = create_vbo(handData.c);
-        handVBO[2] = create_vbo(handData.n);
-        handVBO[3] = create_vbo(handData.t);
+        handVBO[0] = this.create_vbo(handData.p);
+        handVBO[1] = this.create_vbo(handData.c);
+        handVBO[2] = this.create_vbo(handData.n);
+        handVBO[3] = this.create_vbo(handData.t);
 
 
-        var handIBO = create_ibo(handData.i_triangles);
+        var handIBO = this.create_ibo(handData.i_triangles);
 
         // VBOのバインドと登録
-        set_attribute(handVBO, attLocation, attStride);
+        this.set_attribute(handVBO, attLocation, attStride);
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, handIBO);
 
         // VBOの生成
         var jointVBO = [];
-        jointVBO[0] = create_vbo(jointData.p);
-        jointVBO[1] = create_vbo(jointData.c);
-        jointVBO[2] = create_vbo(jointData.n);
-        jointVBO[3] = create_vbo(jointData.t);
+        jointVBO[0] = this.create_vbo(jointData.p);
+        jointVBO[1] = this.create_vbo(jointData.c);
+        jointVBO[2] = this.create_vbo(jointData.n);
+        jointVBO[3] = this.create_vbo(jointData.t);
 
 
-        var jointIBO = create_ibo(jointData.i_triangles);
+        var jointIBO = this.create_ibo(jointData.i_triangles);
 
         // VBOのバインドと登録
-        set_attribute(jointVBO, attLocation, attStride);
+        this.set_attribute(jointVBO, attLocation, attStride);
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, jointIBO);
 
         // VBOの生成
         var rootVBO = [];
-        rootVBO[0] = create_vbo(rootData.p);
-        rootVBO[1] = create_vbo(rootData.c);
-        rootVBO[2] = create_vbo(rootData.n);
-        rootVBO[3] = create_vbo(rootData.t);
+        rootVBO[0] = this.create_vbo(rootData.p);
+        rootVBO[1] = this.create_vbo(rootData.c);
+        rootVBO[2] = this.create_vbo(rootData.n);
+        rootVBO[3] = this.create_vbo(rootData.t);
 
 
-        var rootIBO = create_ibo(rootData.i_triangles);
+        var rootIBO = this.create_ibo(rootData.i_triangles);
 
         // VBOのバインドと登録
-        set_attribute(rootVBO, attLocation, attStride);
+        this.set_attribute(rootVBO, attLocation, attStride);
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, rootIBO);
 
 
         // VBOの生成
         var arm1VBO = [];
-        arm1VBO[0] = create_vbo(arm1Data.p);
-        arm1VBO[1] = create_vbo(arm1Data.c);
-        arm1VBO[2] = create_vbo(arm1Data.n);
-        arm1VBO[3] = create_vbo(arm1Data.t);
+        arm1VBO[0] = this.create_vbo(arm1Data.p);
+        arm1VBO[1] = this.create_vbo(arm1Data.c);
+        arm1VBO[2] = this.create_vbo(arm1Data.n);
+        arm1VBO[3] = this.create_vbo(arm1Data.t);
 
-        var arm1IBO = create_ibo(arm1Data.i_triangles);
+        var arm1IBO = this.create_ibo(arm1Data.i_triangles);
 
         // VBOのバインドと登録
-        set_attribute(arm1VBO, attLocation, attStride);
+        this.set_attribute(arm1VBO, attLocation, attStride);
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, arm1IBO);
 
         // VBOの生成
         var arm2VBO = [];
-        arm2VBO[0] = create_vbo(arm2Data.p);
-        arm2VBO[1] = create_vbo(arm2Data.c);
-        arm2VBO[2] = create_vbo(arm2Data.n);
-        arm2VBO[3] = create_vbo(arm2Data.t);
+        arm2VBO[0] = this.create_vbo(arm2Data.p);
+        arm2VBO[1] = this.create_vbo(arm2Data.c);
+        arm2VBO[2] = this.create_vbo(arm2Data.n);
+        arm2VBO[3] = this.create_vbo(arm2Data.t);
 
-        var arm2IBO = create_ibo(arm2Data.i_triangles);
+        var arm2IBO = this.create_ibo(arm2Data.i_triangles);
 
         // VBOのバインドと登録
-        set_attribute(arm2VBO, attLocation, attStride);
+        this.set_attribute(arm2VBO, attLocation, attStride);
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, arm2IBO);
 
 
