@@ -19769,12 +19769,16 @@
 	        //sliderの情報を取得
 	        //state. storeから初期値を取得する
 	        _this.state = {
-	            slider: _this.store.getSliderInfo()
+	            slider: _this.store.getSliderInfo(),
+	            ipbox: _this.store.getIPBoxInfo()
 	        };
 
 	        //listen from store's emit
 	        _this.store.on(_appStore2.default.UPDATE_SLIDER, function (err, storeSlider) {
 	            this.setState({ slider: storeSlider });
+	        }.bind(_this));
+	        _this.store.on(_appStore2.default.UPDATE_IPBOX, function (err, storeIPBox) {
+	            this.setState({ ipbox: storeIPBox });
 	        }.bind(_this));
 
 	        //bind function
@@ -19857,7 +19861,7 @@
 	                _react2.default.createElement(
 	                    'p',
 	                    null,
-	                    _react2.default.createElement('textarea', { id: 'ip_box', rows: '10', cols: '10', readOnly: true })
+	                    _react2.default.createElement('textarea', { id: this.state.ipbox.id, value: this.state.ipbox.value, rows: this.state.ipbox.rows, cols: this.state.ipbox.cols, readOnly: true })
 	                )
 	            );
 	        }
@@ -20053,7 +20057,7 @@
 	            var myIP = 0;
 
 	            var socket = _socket2.default.connect(); //connection開始
-	            var ele_ipbox = document.getElementById("ip_box");
+	            // var ele_ipbox = document.getElementById("ip_box");
 	            // var ele_button_disconnect = document.getElementById("button_disconnect");
 	            // ele_button_disconnect.addEventListener("click",function(){
 	            // 	console.log("切断")
@@ -20085,12 +20089,14 @@
 
 	            socket.on("push_guest_list", function (push_data) {
 	                //接続してる人たち
-	                //guestdata_list = push_data;
+	                guestdata_list = push_data;
+	                var ipbox_value = "";
 	                console.log("receive guestdata_list : " + push_data);
 	                //ele_ipbox.value = "";
 	                for (var i = 0; i < guestdata_list.length; i++) {
-	                    ele_ipbox.value += "[" + guestdata_list[i] + "]\n";
+	                    ipbox_value += "[" + guestdata_list[i] + "]\n";
 	                }
+	                this.action.updateIPBox(ipbox_value); //actionにipboxの中身送信
 	            }.bind(this));
 	            socket.on("push_guest", function (push_data) {
 	                //自分のIPキープしとく
@@ -20920,6 +20926,14 @@
 	                value: value
 	            });
 	        }
+	    }, {
+	        key: "updateIPBox",
+	        value: function updateIPBox(value) {
+	            this.dispatcher.dispatch({
+	                actionType: "update_ipbox",
+	                value: value
+	            });
+	        }
 	    }]);
 
 	    return Action;
@@ -20997,6 +21011,13 @@
 	            height: 512
 	        });
 
+	        _this.ipbox = new IPBoxStruct({
+	            id: "ipbox",
+	            value: "",
+	            rows: 10,
+	            cols: 10
+	        });
+
 	        //actionでdispatchに与えられたオブジェクトが
 	        //ここでpayloadとして取得される
 	        //storeを更新した後にEmitしてビューへ送る
@@ -21010,6 +21031,9 @@
 	                    }
 	                }
 	                _this.emit(Store.UPDATE_SLIDER, null, _this.slider);
+	            } else if (payload.actionType === "update_ipbox") {
+	                _this.ipbox.value = payload.value;
+	                _this.emit(Store.UPDATE_IPBOX, null, _this.ipbox);
 	            }
 	        });
 	        return _this;
@@ -21019,6 +21043,11 @@
 	        key: "getSliderInfo",
 	        value: function getSliderInfo() {
 	            return this.slider;
+	        }
+	    }, {
+	        key: "getIPBoxInfo",
+	        value: function getIPBoxInfo() {
+	            return this.ipbox;
 	        }
 	    }, {
 	        key: "getCanvasInfo",
@@ -21035,6 +21064,7 @@
 
 
 	Store.UPDATE_SLIDER = "update_slider";
+	Store.UPDATE_IPBOX = "update_ipbox";
 
 	var SliderStrict = function SliderStrict(props) {
 	    _classCallCheck(this, SliderStrict);
@@ -21052,6 +21082,15 @@
 
 	    this.width = props.width;
 	    this.height = props.height;
+	};
+
+	var IPBoxStruct = function IPBoxStruct(props) {
+	    _classCallCheck(this, IPBoxStruct);
+
+	    this.id = props.id;
+	    this.value = props.value;
+	    this.rows = props.rows;
+	    this.cols = props.cols;
 	};
 
 /***/ },

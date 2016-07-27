@@ -43,6 +43,13 @@ export default class Store extends EventEmitter {
             width: 512,
             height: 512
         });
+
+        this.ipbox = new IPBoxStruct({
+            id: "ipbox",
+            value: "",
+            rows: 10,
+            cols: 10
+        });
         
         //actionでdispatchに与えられたオブジェクトが
         //ここでpayloadとして取得される
@@ -57,6 +64,9 @@ export default class Store extends EventEmitter {
                     }
                 }
                 this.emit(Store.UPDATE_SLIDER,null,this.slider)
+            }else if(payload.actionType === "update_ipbox"){
+                this.ipbox.value = payload.value;
+                this.emit(Store.UPDATE_IPBOX,null,this.ipbox)
             }
         });
     }
@@ -64,12 +74,16 @@ export default class Store extends EventEmitter {
     getSliderInfo(){
         return this.slider;
     }
+    getIPBoxInfo(){
+        return this.ipbox;
+    }
     getCanvasInfo(){;
         return this.canvas
     }
 }
 
 Store.UPDATE_SLIDER = "update_slider";
+Store.UPDATE_IPBOX = "update_ipbox"
 
 class SliderStrict{
     constructor(props){
@@ -85,5 +99,14 @@ class CanvasStruct{
     constructor(props){
         this.width = props.width;
         this.height = props.height;
+    }
+}
+
+class IPBoxStruct{
+    constructor(props){
+        this.id = props.id;
+        this.value = props.value;
+        this.rows = props.rows;
+        this.cols = props.cols;
     }
 }

@@ -33,13 +33,18 @@ export default class RobotArmApp extends React.Component {
         //sliderの情報を取得
         //state. storeから初期値を取得する
         this.state = {
-            slider: this.store.getSliderInfo()
+            slider: this.store.getSliderInfo(),
+            ipbox: this.store.getIPBoxInfo()
         };
 
         //listen from store's emit
         this.store.on(Store.UPDATE_SLIDER,function(err, storeSlider){
             this.setState({slider : storeSlider});
         }.bind(this))
+        this.store.on(Store.UPDATE_IPBOX,function(err, storeIPBox){
+            this.setState({ipbox : storeIPBox});
+        }.bind(this))
+        
 
         //bind function
         this.componentDidMount = this.componentDidMount.bind(this);
@@ -99,7 +104,7 @@ export default class RobotArmApp extends React.Component {
                     <input id={this.state.slider[3].id} type="range" onChange={this.sliderChange.bind(this)} value={this.state.slider[3].value} min={this.state.slider[3].min} max={this.state.slider[3].max} step={this.state.slider[3].step} /><br />
                 </p>
                 <p>
-                    <textarea id="ip_box" rows="10" cols="10" readOnly></textarea>
+                    <textarea id={this.state.ipbox.id} value={this.state.ipbox.value} rows={this.state.ipbox.rows} cols={this.state.ipbox.cols} readOnly></textarea>
                 </p>
             </div>
         );
@@ -345,7 +350,7 @@ export default class RobotArmApp extends React.Component {
 
 
         var socket = io.connect();//connection開始
-        var ele_ipbox = document.getElementById("ip_box");
+        // var ele_ipbox = document.getElementById("ip_box");
         // var ele_button_disconnect = document.getElementById("button_disconnect");
         // ele_button_disconnect.addEventListener("click",function(){
         // 	console.log("切断")
@@ -372,12 +377,14 @@ export default class RobotArmApp extends React.Component {
         }.bind(this));
 
         socket.on("push_guest_list",function(push_data){//接続してる人たち
-            //guestdata_list = push_data;
+            guestdata_list = push_data;
+            let ipbox_value = "";
             console.log("receive guestdata_list : " + push_data);
             //ele_ipbox.value = "";
             for(var i=0;i<guestdata_list.length;i++){
-                ele_ipbox.value += ("[" + guestdata_list[i] + "]\n");
+                ipbox_value += ("[" + guestdata_list[i] + "]\n");
             }
+            this.action.updateIPBox(ipbox_value);//actionにipboxの中身送信
         }.bind(this));
         socket.on("push_guest",function(push_data){//自分のIPキープしとく
             myIP = push_data;

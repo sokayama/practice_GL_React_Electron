@@ -15,7 +15,13 @@ export default class Action{
             actionType: "update_slider",
             id: id,
             value: value
-        })
+        });
+    }
+    updateIPBox(value){
+        this.dispatcher.dispatch({
+            actionType: "update_ipbox",
+            value: value
+        });
     }
 }
 
