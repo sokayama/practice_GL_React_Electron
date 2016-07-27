@@ -19816,7 +19816,7 @@
 	    }, {
 	        key: 'sliderChangeSocket',
 	        value: function sliderChangeSocket(id, value) {
-	            this.action.updateslider(id, value);
+	            this.action.updateSlider(id, value);
 	        }
 	    }, {
 	        key: 'componentDidMount',
@@ -20064,24 +20064,24 @@
 	                //サーバーから受信
 	                // ele_slider1.value = push_data;
 	                // slider1 = push_data;
-	                sliderChangeSocket(0, push_data);
+	                this.sliderChangeSocket(0, push_data);
 	                console.log("receive push_data : " + push_data);
-	            });
+	            }.bind(this));
 	            socket.on("push10", function (push_data) {
 	                //サーバーから受信
-	                sliderChangeSocket(1, push_data);
+	                this.sliderChangeSocket(1, push_data);
 	                console.log("receive push_data : " + push_data);
-	            });
+	            }.bind(this));
 	            socket.on("push2", function (push_data) {
 	                //サーバーから受信
-	                sliderChangeSocket(2, push_data);
+	                this.sliderChangeSocket(2, push_data);
 	                console.log("receive push_data : " + push_data);
-	            });
+	            }.bind(this));
 	            socket.on("push20", function (push_data) {
 	                //サーバーから受信
-	                sliderChangeSocket(3, push_data);
+	                this.sliderChangeSocket(3, push_data);
 	                console.log("receive push_data : " + push_data);
-	            });
+	            }.bind(this));
 
 	            socket.on("push_guest_list", function (push_data) {
 	                //接続してる人たち
@@ -20091,16 +20091,16 @@
 	                for (var i = 0; i < guestdata_list.length; i++) {
 	                    ele_ipbox.value += "[" + guestdata_list[i] + "]\n";
 	                }
-	            });
+	            }.bind(this));
 	            socket.on("push_guest", function (push_data) {
 	                //自分のIPキープしとく
 	                myIP = push_data;
 	                console.log("私のIPは" + myIP);
-	            });
+	            }.bind(this));
 	            socket.on("connect", function () {
 	                //タイムアウトを5秒に設定する
 	                socket.headbeatTimeout = 5000;
-	            });
+	            }.bind(this));
 	            // window.onbeforeunload = function (e) {
 	            //     console.log("disconnected..." + myIP)
 	            //     socket.emit("user_disconnected",myIP);
