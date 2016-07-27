@@ -27,7 +27,7 @@ export default class RobotArmApp extends React.Component {
         }.bind(this))
 
         //bind function
-        
+        this.sliderChange = this.sliderChange.bind(this);
     }
     
     styles(){
