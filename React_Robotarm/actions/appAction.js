@@ -5,6 +5,7 @@
 export default class Action{
     constructor(props){
         this.dispatcher = props.dispatcher;
+        this.initWebGL();
     }
     //dispatchへ与えたオブジェクトが
     //storeのdispatcher.registerに登録された関数へ
@@ -16,6 +17,21 @@ export default class Action{
             value: value
         })
     }
+
+    initWebGL(){
+        // - canvas と WebGL コンテキストの初期化 -------------------------------------
+        // canvasエレメントを取得
+        // c = document.getElementById('canvas');
+
+
+        // // webglコンテキストを取得
+        // gl = c.getContext('webgl') || c.getContext('experimental-webgl');
+
+        // //create_texture("bluetex.jpg",0, initialize);
+        // create_texture("w089_03.jpg",0,initialize);
+
+    }
+
 }
 
 
@@ -26,21 +42,6 @@ var c, gl, vs, fs;
 var textures = [];
 
 
-window.onload = function(){
-	// - canvas と WebGL コンテキストの初期化 -------------------------------------
-	// canvasエレメントを取得
-	c = document.getElementById('canvas');
-
-	// canvasのサイズをスクリーン全体に広げる
-	c.width = 512;
-	c.height = 512;
-
-	// webglコンテキストを取得
-	gl = c.getContext('webgl') || c.getContext('experimental-webgl');
-
-	//create_texture("bluetex.jpg",0, initialize);
-	create_texture("w089_03.jpg",0,initialize);
-};
 
 function initialize(){
 

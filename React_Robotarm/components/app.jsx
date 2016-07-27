@@ -14,8 +14,11 @@ export default class RobotArmApp extends React.Component {
         this.action = new Action({dispatcher: dispatcher, props:props});
         this.store = new Store ({dispatcher: dispatcher, props:props})
 
+        //canvas情報
+        this.canvasWidth = this.store.getCanvasInfo().width;
+        this.canvasHeight = this.store.getCanvasInfo().height;
+        
         //sliderの情報を取得
-
         //state. storeから初期値を取得する
         this.state = {
             slider: this.store.getSliderInfo()
@@ -47,7 +50,7 @@ export default class RobotArmApp extends React.Component {
         return (
 
             <div>
-                <canvas id="canvas"></canvas>
+                <canvas id="canvas" width={this.canvasWidth} height={this.canvasHeight}></canvas>
                 <p>根元関節<br />
                     <input id={this.state.slider[0].id} type="range" onChange={this.sliderChange.bind(this)} value={this.state.slider[0].value} min={this.state.slider[0].min} max={this.state.slider[0].max} step={this.state.slider[0].step} /><br />
                     <input id={this.state.slider[1].id} type="range" onChange={this.sliderChange.bind(this)} value={this.state.slider[1].value} min={this.state.slider[1].min} max={this.state.slider[1].max} step={this.state.slider[1].step}  /><br />

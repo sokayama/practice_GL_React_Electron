@@ -38,6 +38,11 @@ export default class Store extends EventEmitter {
             value: "0"
         }))
         
+        //canvas情報
+        this.canvas = new CanvasStruct({
+            width: 512,
+            height: 512
+        });
         
         //actionでdispatchに与えられたオブジェクトが
         //ここでpayloadとして取得される
@@ -59,6 +64,9 @@ export default class Store extends EventEmitter {
     getSliderInfo(){
         return this.slider;
     }
+    getCanvasInfo(){;
+        return this.canvas
+    }
 }
 
 Store.UPDATE_SLIDER = "update_slider";
@@ -71,5 +79,11 @@ class SliderStrict{
         this.max = props.max;
         this.step = props.step;
         this.value = props.value;
+    }
+}
+class CanvasStruct{
+    constructor(props){
+        this.width = props.width;
+        this.height = props.height;
     }
 }
