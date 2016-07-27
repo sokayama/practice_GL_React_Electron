@@ -43,6 +43,7 @@ export default class RobotArmApp extends React.Component {
         //bind function
         this.componentDidMount = this.componentDidMount.bind(this);
         this.sliderChange = this.sliderChange.bind(this);
+        this.sliderChangeSocket = this.sliderChangeSocket.bind(this);
         this.initWebGL = this.initWebGL.bind(this);
         this.create_texture = this.create_texture.bind(this);
         this.set_attribute = this.set_attribute.bind(this);
@@ -61,6 +62,20 @@ export default class RobotArmApp extends React.Component {
 
     sliderChange(eve){
         this.action.updateSlider(eve.currentTarget.id,eve.currentTarget.value);
+        
+        switch(eve.currentTarget.id){
+            case 0:
+              socket.emit("send1",eve.currentTarget.value);
+            case 1:
+              socket.emit("send10",eve.currentTarget.value);
+            case 2:
+              socket.emit("send2",eve.currentTarget.value);
+            case 3:
+              socket.emit("send20",eve.currentTarget.value);
+        }
+}
+    sliderChangeSocket(id,value){
+        this.action.updateslider(id,value);
     }
     componentDidMount(){
         this.refs.canvas;
@@ -290,37 +305,37 @@ export default class RobotArmApp extends React.Component {
 
 
 
-        //根元スライダ情報取得
-        //まがる
-        var ele_slider1 = document.getElementById("slider1");
-        var slider1 = 0.0;
-        ele_slider1.addEventListener("input",function(eve)
-        {
-            slider1 = eve.currentTarget.value - 0;//cast
-        },false);
-        //ひねる
-        var ele_slider10 = document.getElementById("slider10");
-        var slider10 = 0.0;
-        ele_slider10.addEventListener("input",function(eve)
-        {
-            slider10 = eve.currentTarget.value - 0;//cast
-        },false);
+        // //根元スライダ情報取得
+        // //まがる
+        // var ele_slider1 = document.getElementById("slider1");
+        // var slider1 = 0.0;
+        // ele_slider1.addEventListener("input",function(eve)
+        // {
+        //     slider1 = eve.currentTarget.value - 0;//cast
+        // },false);
+        // //ひねる
+        // var ele_slider10 = document.getElementById("slider10");
+        // var slider10 = 0.0;
+        // ele_slider10.addEventListener("input",function(eve)
+        // {
+        //     slider10 = eve.currentTarget.value - 0;//cast
+        // },false);
 
-        //中央スライダ情報取得
-        //まがる
-        var ele_slider2 = document.getElementById("slider2");
-        var slider2 = 0.0;
-        ele_slider2.addEventListener("input",function(eve)
-        {
-            slider2 = eve.currentTarget.value - 0;//cast
-        },false);
-        //ひねる
-        var ele_slider20 = document.getElementById("slider20");
-        var slider20 = 0.0;
-        ele_slider20.addEventListener("input",function(eve)
-        {
-            slider20 = eve.currentTarget.value - 0;//cast
-        },false);
+        // //中央スライダ情報取得
+        // //まがる
+        // var ele_slider2 = document.getElementById("slider2");
+        // var slider2 = 0.0;
+        // ele_slider2.addEventListener("input",function(eve)
+        // {
+        //     slider2 = eve.currentTarget.value - 0;//cast
+        // },false);
+        // //ひねる
+        // var ele_slider20 = document.getElementById("slider20");
+        // var slider20 = 0.0;
+        // ele_slider20.addEventListener("input",function(eve)
+        // {
+        //     slider20 = eve.currentTarget.value - 0;//cast
+        // },false);
 
 
         //socket.io関係	
@@ -337,31 +352,28 @@ export default class RobotArmApp extends React.Component {
         // })
 
         socket.on("push1",function(push_data){//サーバーから受信
-            ele_slider1.value = push_data;
-            slider1 = push_data;
+            // ele_slider1.value = push_data;
+            // slider1 = push_data;
+            sliderChangeSocket(0,push_data);
             console.log("receive push_data : " + push_data);
         });
         socket.on("push10",function(push_data){//サーバーから受信
-            ele_slider10.value = push_data;
-            slider10 = push_data;
+            sliderChangeSocket(1,push_data);
             console.log("receive push_data : " + push_data);
         });
         socket.on("push2",function(push_data){//サーバーから受信
-            ele_slider2.value = push_data;
-            slider2 = push_data;
+            sliderChangeSocket(2,push_data);
             console.log("receive push_data : " + push_data);
         });
         socket.on("push20",function(push_data){//サーバーから受信
-            ele_slider20.value = push_data;
-            slider20 = push_data;
+            sliderChangeSocket(3,push_data);
             console.log("receive push_data : " + push_data);
         });
 
         socket.on("push_guest_list",function(push_data){//接続してる人たち
-            console.log("書き変わってます")
-            guestdata_list = push_data;
+            //guestdata_list = push_data;
             console.log("receive guestdata_list : " + push_data);
-            ele_ipbox.value = "";
+            //ele_ipbox.value = "";
             for(var i=0;i<guestdata_list.length;i++){
                 ele_ipbox.value += ("[" + guestdata_list[i] + "]\n");
             }
@@ -374,11 +386,11 @@ export default class RobotArmApp extends React.Component {
         　//タイムアウトを5秒に設定する
         　socket.headbeatTimeout = 5000;
         });
-        window.onbeforeunload = function (e) {
-            console.log("disconnected..." + myIP)
-            socket.emit("user_disconnected",myIP);
+        // window.onbeforeunload = function (e) {
+        //     console.log("disconnected..." + myIP)
+        //     socket.emit("user_disconnected",myIP);
 
-        }
+        // }
         
         //スライダ情報の取得
         ele_slider1.addEventListener("change",function(eve){
