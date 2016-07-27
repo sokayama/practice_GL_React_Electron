@@ -35,6 +35,9 @@ export default class RobotArmApp extends React.Component {
 
         }
     }
+
+    //private関数
+    //actionに値を送ったりする
     sliderChange(eve){
         this.action.updateSlider(eve.currentTarget.id,eve.currentTarget.value);
     }
