@@ -2,7 +2,7 @@
   "name": "robotarm_react",
   "version": "1.0.0",
   "description": "react test",
-  "main": "bundle.js",
+  "main": "electronMain.js",
   "dependencies": {},
   "devDependencies": {},
   "scripts": {

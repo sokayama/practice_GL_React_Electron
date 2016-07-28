@@ -323,7 +323,7 @@ export default class RobotArmApp extends React.Component {
         var myIP = 0;
 
 
-        this.socket = io.connect();//connection開始
+        this.socket = io.connect("http://192.168.1.89:8080");//connection開始
         this.socket.on("push0",function(push_data){//サーバーから受信
             // ele_slider1.value = push_data;
             // slider1 = push_data;
