@@ -14,10 +14,7 @@ io.set('heartbeat interval',5000);
 var guestdata_list = [];
 var guestdata=0;
 
-var push_data1 = 0;
-var push_data10 = 0;
-var push_data2 = 0;
-var push_data20 = 0;
+var push_data = [];
 // io.sockets.on("connection",function(socket){//
 io.on("connection",function(socket){//
 
@@ -29,10 +26,10 @@ io.on("connection",function(socket){//
   socket.emit("push_guest_list",guestdata_list);//接続者リストを送る
   socket.broadcast.emit("push_guest_list",guestdata_list);//接続者リストを送る
 
-  socket.emit("push0",push_data1);//スライダーデータを送る
-  socket.emit("push1",push_data10);//スライダーデータを送る
-  socket.emit("push2",push_data2);//スライダーデータを送る
-  socket.emit("push3",push_data20);//スライダーデータを送る
+  socket.emit("push0",push_data[0]);//スライダーデータを送る
+  socket.emit("push1",push_data[1]);//スライダーデータを送る
+  socket.emit("push2",push_data[2]);//スライダーデータを送る
+  socket.emit("push3",push_data[3]);//スライダーデータを送る
 
 
   socket.emit("push_guest",guestdata);//あなたのIP教えます
@@ -55,31 +52,31 @@ io.on("connection",function(socket){//
 
   socket.on("send0",function(send_data){//クライアントから受信
     console.log("receive slider0 send_data : "+ send_data);
-    push_data1 = send_data;
+    push_data[0] = send_data;
 
-    socket.emit("push0",push_data1);
-    socket.broadcast.emit("push0",push_data1);
+    socket.emit("push0",push_data[0]);
+    socket.broadcast.emit("push0",push_data[0]);
   });
   socket.on("send1",function(send_data){//クライアントから受信
     console.log("receive slider1 send_data : "+ send_data);
-    push_data10 = send_data;
+    push_data[1] = send_data;
 
-    socket.emit("push1",push_data10);
-    socket.broadcast.emit("push1",push_data10);
+    socket.emit("push1",push_data[1]);
+    socket.broadcast.emit("push1",push_data[1]);
   });
   socket.on("send2",function(send_data){//クライアントから受信
     console.log("receive slider2 send_data : "+ send_data)
-    push_data2 = send_data;
+    push_data[2] = send_data;
 
-    socket.emit("push2",push_data2);
-    socket.broadcast.emit("push2",push_data2);
+    socket.emit("push2",push_data[2]);
+    socket.broadcast.emit("push2",push_data[2]);
   });
   socket.on("send3",function(send_data){//クライアントから受信
     console.log("receive slider3 send_data : "+ send_data);
-    push_data20 = send_data;
+    push_data[3] = send_data;
 
-    socket.emit("push3",push_data20);
-    socket.broadcast.emit("push3",push_data20);
+    socket.emit("push3",push_data[3]);
+    socket.broadcast.emit("push3",push_data[3]);
   });
 });
 
