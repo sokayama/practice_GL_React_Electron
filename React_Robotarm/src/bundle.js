@@ -19755,6 +19755,8 @@
 	        _this.action = new _appAction2.default({ dispatcher: dispatcher, props: props });
 	        _this.store = new _appStore2.default({ dispatcher: dispatcher, props: props });
 
+	        _this.socket = _socket2.default.connect("http://192.168.1.89:8080"); //connection開始
+
 	        //canvas情報
 	        _this.canvasWidth = _this.store.getCanvasInfo().width;
 	        _this.canvasHeight = _this.store.getCanvasInfo().height;
@@ -19767,6 +19769,10 @@
 	        _this.textures = [];
 
 	        _this.socket;
+
+	        _this.myIPAddress;
+
+	        window.addEventListener("beforeunload", _this.disconnectFunc, false);
 
 	        //sliderの情報を取得
 	        //state. storeから初期値を取得する
@@ -19785,6 +19791,7 @@
 
 	        //bind function
 	        _this.componentDidMount = _this.componentDidMount.bind(_this);
+	        _this.disconnectFunc = _this.disconnectFunc.bind(_this);
 	        _this.sliderChange = _this.sliderChange.bind(_this);
 	        _this.sliderChangeSocket = _this.sliderChangeSocket.bind(_this);
 	        _this.initWebGL = _this.initWebGL.bind(_this);
@@ -19837,6 +19844,13 @@
 	            this.initWebGL();
 	        }
 	    }, {
+	        key: 'disconnectFunc',
+	        value: function disconnectFunc() {
+	            console.log("disconnect button" + this.myIPAddress);
+	            this.socket.emit("user_disconnected", this.myIPAddress);
+	            this.socket.disconnect();
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var style = this.styles();
@@ -19869,7 +19883,8 @@
 	                    'p',
 	                    null,
 	                    _react2.default.createElement('textarea', { id: this.state.ipbox.id, value: this.state.ipbox.value, rows: this.state.ipbox.rows, cols: this.state.ipbox.cols, readOnly: true })
-	                )
+	                ),
+	                _react2.default.createElement('input', { type: 'button', onClick: this.disconnectFunc, value: 'disconnect' })
 	            );
 	        }
 
@@ -20028,7 +20043,6 @@
 	            var guestdata_list = [];
 	            var myIP = 0;
 
-	            this.socket = _socket2.default.connect("http://192.168.1.89:8080"); //connection開始
 	            this.socket.on("push0", function (push_data) {
 	                //サーバーから受信
 	                // ele_slider1.value = push_data;
@@ -20065,12 +20079,12 @@
 	            }.bind(this));
 	            this.socket.on("push_guest", function (push_data) {
 	                //自分のIPキープしとく
-	                myIP = push_data;
-	                console.log("私のIPは" + myIP);
+	                this.myIPAddress = push_data;
+	                console.log("私のIDは" + this.myIPAddress);
 	            }.bind(this));
 	            this.socket.on("connect", function () {
 	                //タイムアウトを5秒に設定する
-	                this.socket.headbeatTimeout = 5000;
+	                //this.socket.headbeatTimeout = 5000;
 	            }.bind(this));
 
 	            //マウスドラッグでY軸回転

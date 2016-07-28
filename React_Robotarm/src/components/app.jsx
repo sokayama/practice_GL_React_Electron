@@ -19,6 +19,8 @@ export default class RobotArmApp extends React.Component {
         this.action = new Action({dispatcher: dispatcher, props:props});
         this.store = new Store ({dispatcher: dispatcher, props:props})
 
+        this.socket = io.connect("http://192.168.1.89:8080");//connection開始
+
         //canvas情報
         this.canvasWidth = this.store.getCanvasInfo().width;
         this.canvasHeight = this.store.getCanvasInfo().height;
@@ -31,6 +33,10 @@ export default class RobotArmApp extends React.Component {
         this.textures = [];
 
         this.socket;
+
+        this.myIPAddress;
+
+        window.addEventListener("beforeunload",this.disconnectFunc,false);
 
         //sliderの情報を取得
         //state. storeから初期値を取得する
@@ -50,6 +56,7 @@ export default class RobotArmApp extends React.Component {
 
         //bind function
         this.componentDidMount = this.componentDidMount.bind(this);
+        this.disconnectFunc = this.disconnectFunc.bind(this);
         this.sliderChange = this.sliderChange.bind(this);
         this.sliderChangeSocket = this.sliderChangeSocket.bind(this);
         this.initWebGL = this.initWebGL.bind(this);
@@ -96,6 +103,11 @@ export default class RobotArmApp extends React.Component {
         this.c = ReactDOM.findDOMNode(this.refs.canvas);
         this.initWebGL();
     };
+    disconnectFunc(){
+        console.log("disconnect button" + this.myIPAddress)
+        this.socket.emit("user_disconnected",this.myIPAddress);
+        this.socket.disconnect();
+    }
 
     render(){
         const style = this.styles();
@@ -114,6 +126,7 @@ export default class RobotArmApp extends React.Component {
                 <p>
                     <textarea id={this.state.ipbox.id} value={this.state.ipbox.value} rows={this.state.ipbox.rows} cols={this.state.ipbox.cols} readOnly></textarea>
                 </p>
+                <input type="button" onClick={this.disconnectFunc} value="disconnect"></input>
             </div>
         );
     }
@@ -323,7 +336,6 @@ export default class RobotArmApp extends React.Component {
         var myIP = 0;
 
 
-        this.socket = io.connect("http://192.168.1.89:8080");//connection開始
         this.socket.on("push0",function(push_data){//サーバーから受信
             // ele_slider1.value = push_data;
             // slider1 = push_data;
@@ -354,12 +366,12 @@ export default class RobotArmApp extends React.Component {
             this.action.updateIPBox(ipbox_value);//actionにipboxの中身送信
         }.bind(this));
         this.socket.on("push_guest",function(push_data){//自分のIPキープしとく
-            myIP = push_data;
-            console.log("私のIPは" + myIP)
+            this.myIPAddress = push_data;
+            console.log("私のIDは" + this.myIPAddress)
         }.bind(this));
         this.socket.on("connect",function(){
         　//タイムアウトを5秒に設定する
-        　this.socket.headbeatTimeout = 5000;
+        　//this.socket.headbeatTimeout = 5000;
         }.bind(this));
 
         //マウスドラッグでY軸回転

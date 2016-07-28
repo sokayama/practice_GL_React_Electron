@@ -7,9 +7,9 @@ var http = require('http');
 var server = http.createServer();
 
 var io = require("socket.io")(server);
-//タイムアウトを5秒に設定する　動いてなさそう……
-io.set('heartbeat timeout',5000);
-io.set('heartbeat interval',5000);
+// //タイムアウトを5秒に設定する　動いてなさそう……
+// io.set('heartbeat timeout',5000);
+// io.set('heartbeat interval',5000);
 
 var guestdata_list = [];
 var guestdata=0;
@@ -19,10 +19,15 @@ var push_data = [];
 io.on("connection",function(socket){//
 
 //接続しているクライアント情報取得    
-  console.log("[" + socket.handshake.address + "] is connected");
-  guestdata_list.push(socket.handshake.address);//接続者リスト（arrayだけど）をつくる
-  guestdata = socket.handshake.address;
+  // console.log("[" + socket.handshake.address + "] is connected");
+  // guestdata_list.push(socket.handshake.address);//接続者リスト（arrayだけど）をつくる
+  // guestdata = socket.handshake.address;
+  console.log("[" + socket.id + "] is connected");
+  guestdata_list.push(socket.id);//接続者リスト（arrayだけど）をつくる
+  guestdata = socket.id;
+  
 
+  console.log("push broadcast: guest_list");
   socket.emit("push_guest_list",guestdata_list);//接続者リストを送る
   socket.broadcast.emit("push_guest_list",guestdata_list);//接続者リストを送る
 
@@ -34,7 +39,7 @@ io.on("connection",function(socket){//
 
   socket.emit("push_guest",guestdata);//あなたのIP教えます
   
-  socket.on("user_disconnected",function(data){//ディスコネしたの誰？
+  socket.on("user_disconnected",function(data){//ディスコネボタンを押したとき
     console.log("[" + data + "] is disconnected");
     for(var i =0;i<guestdata_list.length;i++){
         console.log(typeof data);
@@ -44,9 +49,12 @@ io.on("connection",function(socket){//
           break;//同じIPが二人以上いたら全部消さないように
        }
     }
-    console.log("帰っていきます")
-    socket.broadcast.emit("push_guest_list",guestdata_list);//接続者リストを送る
-     
+    socket.broadcast.emit("push_guest_list",guestdata_list);
+  });
+  socket.on("disconnect",function(data){//ディスコネしたの誰？
+    var id = socket.id;
+    console.log("disconnected" + id);
+    //var clients = socket.eio.clients();
   });
 
 
