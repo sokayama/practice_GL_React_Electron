@@ -19892,8 +19892,6 @@
 
 	            // - シェーダとプログラムオブジェクトの初期化 ---------------------------------
 	            // シェーダのソースを取得
-	            // this.vs = document.getElementById('vs').textContent;
-	            // this.fs = document.getElementById('fs').textContent;
 	            var VERT = '\n            attribute vec3 position;\n            attribute vec3 normal;\n            attribute vec4 color;\n            attribute vec2 texCoord;\n            uniform   mat4 mvpMatrix;\n            uniform mat4 invMatrix;\n            uniform   vec3 lightDirection;\n            uniform   mat4 invtransposeMatrix;\n            uniform   mat4 mv_invtransposeMatrix;\n            varying vec2 textureCoord;\n            varying vec4 vColor;\n\n            void main(){\n                //vNormal = normal;\n                vec2 temptexcoord = texCoord;//一応持ってるだけで使ってない\n\n                //逆転置行列*法線でスフィア環境マップを作る\n                textureCoord.st = ((mv_invtransposeMatrix * vec4(normal,0.0)).xy + 1.0) / 2.0;\n\n                //光の計算(平行光)\n                vec3 n = (invtransposeMatrix * vec4(normal,0.0)).xyz;\t\n                float dotNormal = max(dot(lightDirection,n),0.3);\n                vColor = vec4(color.rgb * dotNormal, color.a);\n                \n                gl_Position = mvpMatrix * vec4(position, 1.0);\n            }     \n        ';
 
 	            var FRAG = '\n            precision mediump float;\n            uniform sampler2D texture;\n\n            varying vec2 textureCoord;\n            varying vec4 vColor;\n\n            void main(){\n\n                vec4 smpColor = texture2D(texture,textureCoord.st);\n\n                gl_FragColor = smpColor * vColor;\n            }\n        ';
@@ -20074,26 +20072,6 @@
 	                //タイムアウトを5秒に設定する
 	                this.socket.headbeatTimeout = 5000;
 	            }.bind(this));
-	            // window.onbeforeunload = function (e) {
-	            //     console.log("disconnected..." + myIP)
-	            //     socket.emit("user_disconnected",myIP);
-
-	            // }
-
-	            //スライダ情報の取得
-	            // ele_slider1.addEventListener("change",function(eve){
-	            //     socket.emit("send1",ele_slider1.value);//サーバーへ送信
-	            // },false);
-	            // ele_slider10.addEventListener("change",function(eve){
-	            //     socket.emit("send10",ele_slider10.value);//サーバーへ送信
-	            // },false);
-	            // ele_slider2.addEventListener("change",function(eve){
-	            //     socket.emit("send2",ele_slider2.value);//サーバーへ送信
-	            // },false);
-	            // ele_slider20.addEventListener("change",function(eve){
-	            //     socket.emit("send20",ele_slider20.value);//サーバーへ送信
-	            // },false);
-
 
 	            //マウスドラッグでY軸回転
 	            var flgDrag = false;

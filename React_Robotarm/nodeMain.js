@@ -131,9 +131,9 @@ server.on("request", function(req, res){
   }else if(url.match(".js")){
     fs.readFile("." + url, "utf8", function(err, data) {
       if (err) {
-        // res.writeHead(404, {"Content-Type": "text/plain"});
-        // res.write("not found!");
-        // console.log("cannot read js file");
+        res.writeHead(404, {"Content-Type": "text/plain"});
+        res.write("not found!");
+        console.log("cannot read js file");
 
         return res.end();
       }
@@ -171,7 +171,7 @@ server.on("request", function(req, res){
       res.end();
     });
   }else{
-      //console.log("cannot read **undefined** file");    
+      //console.log("cannot read **UNDEFINED** file");    
   }
 
 });

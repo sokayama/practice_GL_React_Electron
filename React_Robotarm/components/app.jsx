@@ -136,8 +136,6 @@ export default class RobotArmApp extends React.Component {
 
         // - シェーダとプログラムオブジェクトの初期化 ---------------------------------
         // シェーダのソースを取得
-        // this.vs = document.getElementById('vs').textContent;
-        // this.fs = document.getElementById('fs').textContent;
         const VERT = `
             attribute vec3 position;
             attribute vec3 normal;
@@ -363,28 +361,6 @@ export default class RobotArmApp extends React.Component {
         　//タイムアウトを5秒に設定する
         　this.socket.headbeatTimeout = 5000;
         }.bind(this));
-        // window.onbeforeunload = function (e) {
-        //     console.log("disconnected..." + myIP)
-        //     socket.emit("user_disconnected",myIP);
-
-        // }
-        
-        //スライダ情報の取得
-        // ele_slider1.addEventListener("change",function(eve){
-        //     socket.emit("send1",ele_slider1.value);//サーバーへ送信
-        // },false);
-        // ele_slider10.addEventListener("change",function(eve){
-        //     socket.emit("send10",ele_slider10.value);//サーバーへ送信
-        // },false);
-        // ele_slider2.addEventListener("change",function(eve){
-        //     socket.emit("send2",ele_slider2.value);//サーバーへ送信
-        // },false);
-        // ele_slider20.addEventListener("change",function(eve){
-        //     socket.emit("send20",ele_slider20.value);//サーバーへ送信
-        // },false);
-
-
-            
 
         //マウスドラッグでY軸回転
         var flgDrag = false;
