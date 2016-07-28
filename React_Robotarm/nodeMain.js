@@ -29,10 +29,10 @@ io.on("connection",function(socket){//
   socket.emit("push_guest_list",guestdata_list);//接続者リストを送る
   socket.broadcast.emit("push_guest_list",guestdata_list);//接続者リストを送る
 
-  socket.emit("push1",push_data1);//スライダーデータを送る
-  socket.emit("push10",push_data10);//スライダーデータを送る
+  socket.emit("push0",push_data1);//スライダーデータを送る
+  socket.emit("push1",push_data10);//スライダーデータを送る
   socket.emit("push2",push_data2);//スライダーデータを送る
-  socket.emit("push20",push_data20);//スライダーデータを送る
+  socket.emit("push3",push_data20);//スライダーデータを送る
 
 
   socket.emit("push_guest",guestdata);//あなたのIP教えます
@@ -53,33 +53,33 @@ io.on("connection",function(socket){//
   });
 
 
-  socket.on("send1",function(send_data){//クライアントから受信
-    console.log("recerive send_data : "+ send_data);
+  socket.on("send0",function(send_data){//クライアントから受信
+    console.log("receive slider0 send_data : "+ send_data);
     push_data1 = send_data;
 
-    socket.emit("push1",push_data1);
-    socket.broadcast.emit("push1",push_data1);
+    socket.emit("push0",push_data1);
+    socket.broadcast.emit("push0",push_data1);
   });
-  socket.on("send10",function(send_data){//クライアントから受信
-    console.log("recerive send_data : "+ send_data);
+  socket.on("send1",function(send_data){//クライアントから受信
+    console.log("receive  slider1 send_data : "+ send_data);
     push_data10 = send_data;
 
-    socket.emit("push10",push_data10);
-    socket.broadcast.emit("push10",push_data10);
+    socket.emit("push1",push_data10);
+    socket.broadcast.emit("push1",push_data10);
   });
   socket.on("send2",function(send_data){//クライアントから受信
-    console.log("recerive send_data : "+ send_data)
+    console.log("receive slider2 send_data : "+ send_data)
     push_data2 = send_data;
 
     socket.emit("push2",push_data2);
     socket.broadcast.emit("push2",push_data2);
   });
-  socket.on("send20",function(send_data){//クライアントから受信
-    console.log("recerive send_data : "+ send_data);
+  socket.on("send3",function(send_data){//クライアントから受信
+    console.log("receive slider3 send_data : "+ send_data);
     push_data20 = send_data;
 
-    socket.emit("push20",push_data20);
-    socket.broadcast.emit("push20",push_data20);
+    socket.emit("push3",push_data20);
+    socket.broadcast.emit("push3",push_data20);
   });
 });
 

@@ -19809,16 +19809,16 @@
 	            console.log("send :" + eve.currentTarget.id + " " + eve.currentTarget.value);
 	            switch (eve.currentTarget.id) {
 	                case "slider0":
-	                    this.socket.emit("send1", eve.currentTarget.value - 0);
+	                    this.socket.emit("send0", eve.currentTarget.value - 0);
 	                    break;
 	                case "slider1":
-	                    this.socket.emit("send10", eve.currentTarget.value - 0);
+	                    this.socket.emit("send1", eve.currentTarget.value - 0);
 	                    break;
 	                case "slider2":
 	                    this.socket.emit("send2", eve.currentTarget.value - 0);
 	                    break;
 	                case "slider3":
-	                    this.socket.emit("send20", eve.currentTarget.value - 0);
+	                    this.socket.emit("send3", eve.currentTarget.value - 0);
 	                    break;
 	                default:
 	            }
@@ -20031,27 +20031,27 @@
 	            var myIP = 0;
 
 	            this.socket = _socket2.default.connect(); //connection開始
-	            this.socket.on("push1", function (push_data) {
+	            this.socket.on("push0", function (push_data) {
 	                //サーバーから受信
 	                // ele_slider1.value = push_data;
 	                // slider1 = push_data;
 	                this.sliderChangeSocket("slider0", push_data);
-	                console.log("receive push_data : " + push_data);
+	                console.log("receive slider0 push_data : " + push_data);
 	            }.bind(this));
-	            this.socket.on("push10", function (push_data) {
+	            this.socket.on("push1", function (push_data) {
 	                //サーバーから受信
 	                this.sliderChangeSocket("slider1", push_data);
-	                console.log("receive push_data : " + push_data);
+	                console.log("receive slider1 push_data : " + push_data);
 	            }.bind(this));
 	            this.socket.on("push2", function (push_data) {
 	                //サーバーから受信
 	                this.sliderChangeSocket("slider2", push_data);
-	                console.log("receive push_data : " + push_data);
+	                console.log("receive slider2 push_data : " + push_data);
 	            }.bind(this));
-	            this.socket.on("push20", function (push_data) {
+	            this.socket.on("push3", function (push_data) {
 	                //サーバーから受信
 	                this.sliderChangeSocket("slider3", push_data);
-	                console.log("receive push_data : " + push_data);
+	                console.log("receive slider3 push_data : " + push_data);
 	            }.bind(this));
 
 	            this.socket.on("push_guest_list", function (push_data) {
