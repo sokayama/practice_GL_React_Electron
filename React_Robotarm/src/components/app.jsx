@@ -36,7 +36,7 @@ export default class RobotArmApp extends React.Component {
 
         this.myIPAddress;
 
-        window.addEventListener("beforeunload",this.disconnectFunc,false);
+        // window.addEventListener("beforeunload",this.disconnectFunc,false);
 
         //sliderの情報を取得
         //state. storeから初期値を取得する

@@ -19772,7 +19772,7 @@
 
 	        _this.myIPAddress;
 
-	        window.addEventListener("beforeunload", _this.disconnectFunc, false);
+	        // window.addEventListener("beforeunload",this.disconnectFunc,false);
 
 	        //sliderの情報を取得
 	        //state. storeから初期値を取得する

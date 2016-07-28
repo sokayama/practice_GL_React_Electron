@@ -39,21 +39,30 @@ io.on("connection",function(socket){//
 
   socket.emit("push_guest",guestdata);//あなたのIP教えます
   
-  socket.on("user_disconnected",function(data){//ディスコネボタンを押したとき
-    console.log("[" + data + "] is disconnected");
+  // socket.on("user_disconnected",function(data){//ディスコネボタンを押したとき
+  //   console.log("[" + data + "] is disconnected");
+  //   for(var i =0;i<guestdata_list.length;i++){
+  //       console.log(typeof data);
+  //       if(guestdata_list[i] === data){
+  //         console.log("[" + data + "] is deleted");
+  //         guestdata_list.splice(i,1);
+  //         break;//同じIPが二人以上いたら全部消さないように
+  //      }
+  //   }
+  //   socket.broadcast.emit("push_guest_list",guestdata_list);
+  // });
+  socket.on("disconnect",function(data){//ディスコネしたの誰？
+    var id = socket.id;
+    console.log("disconnected" + id);
     for(var i =0;i<guestdata_list.length;i++){
-        console.log(typeof data);
-        if(guestdata_list[i] === data){
-          console.log("[" + data + "] is deleted");
+        //console.log(typeof data);
+        if(guestdata_list[i] === socket.id){
+          console.log("[" + socket.id + "] is deleted");
           guestdata_list.splice(i,1);
           break;//同じIPが二人以上いたら全部消さないように
        }
     }
     socket.broadcast.emit("push_guest_list",guestdata_list);
-  });
-  socket.on("disconnect",function(data){//ディスコネしたの誰？
-    var id = socket.id;
-    console.log("disconnected" + id);
     //var clients = socket.eio.clients();
   });
 
