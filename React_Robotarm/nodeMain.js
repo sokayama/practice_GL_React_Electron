@@ -61,7 +61,7 @@ io.on("connection",function(socket){//
     socket.broadcast.emit("push0",push_data1);
   });
   socket.on("send1",function(send_data){//クライアントから受信
-    console.log("receive  slider1 send_data : "+ send_data);
+    console.log("receive slider1 send_data : "+ send_data);
     push_data10 = send_data;
 
     socket.emit("push1",push_data10);
