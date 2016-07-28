@@ -24,3 +24,9 @@ RobotArm-win32-x64/
 
 #
 node_modules/
+
+#vscode setting
+.vscode
+
+#npm-debug.log
+npm-debug.log
