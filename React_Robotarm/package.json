@@ -26,7 +26,7 @@
   },
   "scripts": {
     "test": "electron ./src/electronMain.js",
-    "start": "electron-packager ./src ./RobotArm --platform=win32 --arch=x64 --version=0.36.1"
+    "packager": "electron-packager ./src ./RobotArm --platform=win32 --arch=x64 --version=0.36.1"
   },
   "author": "",
   "license": "ISC"
